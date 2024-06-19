@@ -19,6 +19,10 @@ app.use("/api", UserRoutes);
 app.use("/api", BikeRoutes);
 app.use("/api", RentalRoutes);
 
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello World!");
+});
+
 // Not Found handler
 app.use(notFoundHandler);
 
@@ -31,10 +35,6 @@ app.use((req: Request, res: Response) => {
     statusCode: 404,
     message: "Not Found",
   });
-});
-
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
 });
 
 export default app;
