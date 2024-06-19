@@ -3,7 +3,10 @@ import cors from "cors";
 import { UserRoutes } from "./app/modules/user/user.route";
 import { BikeRoutes } from "./app/modules/bike/bike.route";
 import { RentalRoutes } from "./app/modules/rentals/rentals.route";
-import { errorHandler } from "./app/middlewares/error.middleware";
+import {
+  errorHandler,
+  notFoundHandler,
+} from "./app/middlewares/error.middleware";
 
 const app: Application = express();
 
@@ -16,7 +19,10 @@ app.use("/api", UserRoutes);
 app.use("/api", BikeRoutes);
 app.use("/api", RentalRoutes);
 
-// Global Error Handler
+// Not Found handler
+app.use(notFoundHandler);
+
+// Error Handler
 app.use(errorHandler);
 
 app.use((req: Request, res: Response) => {
