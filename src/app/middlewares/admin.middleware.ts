@@ -1,4 +1,3 @@
-// admin.middleware.ts
 import { Response, NextFunction } from "express";
 import { AuthRequest } from "./auth.middleware";
 
@@ -10,7 +9,7 @@ export const adminMiddleware = (
   if (req.user?.role !== "admin") {
     return res.status(403).json({
       success: false,
-      message: "Forbidden: Admins only",
+      message: "You have no access to this route",
     });
   }
   next();

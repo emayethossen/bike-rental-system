@@ -7,11 +7,18 @@ const createRental = async (
   bikeId: string,
   startTime: Date,
 ): Promise<TRentals> => {
-  const bike = await Bike.findByIdAndUpdate(bikeId, { isAvailable: false });
+  const bike = await Bike.findById(bikeId);
   if (!bike) {
     throw new Error("Bike not found");
   }
+  if (!bike.isAvailable) {
+    throw new Error("Bike is already rented out");
+  }
 
+  bike.isAvailable = false;
+  await bike.save();
+
+  // Create rental
   const rental = new Rental({ userId, bikeId, startTime });
   await rental.save();
   return rental;

@@ -3,7 +3,7 @@ import cors from "cors";
 import { UserRoutes } from "./app/modules/user/user.route";
 import { BikeRoutes } from "./app/modules/bike/bike.route";
 import { RentalRoutes } from "./app/modules/rentals/rentals.route";
-// import { errorHandler } from "./app/middlewares/error.middleware";
+import { errorHandler } from "./app/middlewares/error.middleware";
 
 const app: Application = express();
 
@@ -17,7 +17,15 @@ app.use("/api", BikeRoutes);
 app.use("/api", RentalRoutes);
 
 // Global Error Handler
-// app.use(errorHandler);
+app.use(errorHandler);
+
+app.use((req: Request, res: Response) => {
+  res.status(404).json({
+    success: false,
+    statusCode: 404,
+    message: "Not Found",
+  });
+});
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
