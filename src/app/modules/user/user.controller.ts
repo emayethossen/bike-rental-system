@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
-import { UserServices } from "./user.service";
+import jwt from "jsonwebtoken";
 import { userValidation } from "./user.validation";
+import { UserServices } from "./user.service";
 import { TUser } from "./user.interface";
+import config from "../../config";
 
 export const userController = {
   signUp: async (req: Request, res: Response) => {
@@ -36,9 +38,16 @@ export const userController = {
         });
       }
 
+      const token = jwt.sign(
+        { _id: user._id, role: user.role },
+        config.jwt_secret as string,
+        { expiresIn: "1h" },
+      );
+
       res.status(200).json({
         success: true,
         message: "Login successful",
+        token,
         data: user,
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,21 +62,12 @@ export const userController = {
 
   getProfile: async (req: Request, res: Response) => {
     try {
-      const userId = req.user?._id;
-
-      if (!userId) {
-        return res.status(401).json({
-          success: false,
-          message: "Unauthorized",
-        });
-      }
-
-      const user = await UserServices.getUserById(userId);
+      const user = req.user;
 
       if (!user) {
-        return res.status(404).json({
+        return res.status(401).json({
           success: false,
-          message: "User not found",
+          message: "Unauthorized: User not found",
         });
       }
 

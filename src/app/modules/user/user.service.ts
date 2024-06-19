@@ -1,7 +1,19 @@
+import config from "../../config";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
+import bcrypt from "bcrypt";
+
+// const createUser = async (userData: TUser) => {
+//   const user = await User.create(userData);
+//   return user.save();
+// };
 
 const createUser = async (userData: TUser) => {
+  const hashedPassword = await bcrypt.hash(
+    userData.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  userData.password = hashedPassword;
   const user = await User.create(userData);
   return user.save();
 };
@@ -11,9 +23,14 @@ const authenticateUser = async (
   password: string,
 ): Promise<TUser | null> => {
   const user = await User.findOne({ email });
-  if (!user || user.password !== password) {
+  if (!user) {
     return null;
   }
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    return null;
+  }
+
   return user;
 };
 
