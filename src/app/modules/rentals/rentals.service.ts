@@ -12,7 +12,7 @@ const createRental = async (
     throw new Error("Bike not found");
   }
   if (!bike.isAvailable) {
-    throw new Error("Bike is already rented out");
+    throw new Error("Bike is already rennted out");
   }
 
   bike.isAvailable = false;
