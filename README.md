@@ -2,6 +2,12 @@
 
 A bike rental service application that allows users to rent bikes and manage their rentals. Admins can manage bike inventory and oversee rentals.
 
+# Live Link
+https://bike-rental-project.vercel.app/
+
+# Github Link
+https://github.com/emayethossen/bike-rental-system.git
+
 ## Table of Contents
 
 - [Features](#features)
@@ -38,8 +44,8 @@ Make sure you have the following software installed:
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/bike-rental-service.git
-    cd bike-rental-service
+    git clone https://github.com/emayethossen/bike-rental-system.git
+    cd bike-rental-system
     ```
 
 2. Install dependencies:
@@ -49,8 +55,8 @@ Make sure you have the following software installed:
 
 3. Create a `.env` file in the root directory and add the following environment variables:
     ```env
-    PORT=3000
-    MONGODB_URI=mongodb://localhost:27017/bike_rental
+    PORT=5000
+    MONGODB_URI=mongodb://localhost:5000
     JWT_SECRET=your_jwt_secret
     ```
 
