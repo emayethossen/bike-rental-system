@@ -9,6 +9,7 @@ const bikeValidationSchema = z.object({
   model: z.string({ required_error: "Model is required" }),
   brand: z.string({ required_error: "Brand is required" }),
   isAvailable: z.boolean().default(true),
+  bikeImage: z.string().optional(),
 });
 
 export const bikeValidation = {

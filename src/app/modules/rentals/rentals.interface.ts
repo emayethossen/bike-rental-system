@@ -8,6 +8,7 @@ export type TRentals = {
   returnTime?: Date;
   totalCost?: number;
   isReturned: boolean;
+  paymentStatus: 'Paid' | 'Unpaid';
   createdAt?: Date;
   updatedAt?: Date;
 };

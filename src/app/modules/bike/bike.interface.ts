@@ -8,6 +8,7 @@ export type TBike = {
   year: number;
   model: string;
   brand: string;
+  bikeImage?: string;
   createdAt?: Date;
   updatedAt?: Date;
-};
+}; 

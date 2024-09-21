@@ -9,6 +9,8 @@ const RentalSchema = new Schema<TRentals>(
     returnTime: { type: Date },
     totalCost: { type: Number },
     isReturned: { type: Boolean, default: false },
+    paymentStatus: { type: String, enum: ['Paid', 'Unpaid'], default: 'Unpaid' },
+
   },
   { timestamps: true },
 );

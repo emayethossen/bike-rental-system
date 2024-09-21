@@ -1,25 +1,24 @@
+
 import { Bike } from "../bike/bike.model";
 import { TRentals } from "./rentals.interface";
 import { Rental } from "./rentals.model";
 
 const createRental = async (
-  userId: string,
-  bikeId: string,
-  startTime: Date,
+  userId: string, bikeId: string, startTime: Date, paymentStatus: string
 ): Promise<TRentals> => {
   const bike = await Bike.findById(bikeId);
   if (!bike) {
     throw new Error("Bike not found");
   }
   if (!bike.isAvailable) {
-    throw new Error("Bike is already rennted out");
+    throw new Error("Bike is already rented out");
   }
 
   bike.isAvailable = false;
   await bike.save();
 
   // Create rental
-  const rental = new Rental({ userId, bikeId, startTime });
+  const rental = new Rental({ userId, bikeId, startTime, paymentStatus });
   await rental.save();
   return rental;
 };
@@ -58,8 +57,18 @@ const getRentalsByUser = async (userId: string): Promise<TRentals[]> => {
   return Rental.find({ userId }).populate("bikeId").exec();
 };
 
+const updatePaymentStatus = async (rentalId: string, status: 'Paid' | 'Unpaid'): Promise<TRentals | null> => {
+  return Rental.findByIdAndUpdate(rentalId, { paymentStatus: status }, { new: true });
+};
+
+const findById = async (rentalId: string): Promise<TRentals | null> => {
+  return Rental.findById(rentalId);
+};
+
 export const RentalService = {
   createRental,
   returnRental,
   getRentalsByUser,
+  updatePaymentStatus,
+  findById,
 };

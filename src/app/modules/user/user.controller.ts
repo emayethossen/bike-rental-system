@@ -122,4 +122,74 @@ export const userController = {
       });
     }
   },
+
+  // Admin-specific methods
+
+  getAllUsers: async (req: Request, res: Response) => {
+    try {
+      const users = await UserServices.getAllUsers();
+      res.status(200).json({
+        success: true,
+        message: "Users retrieved successfully",
+        data: users,
+      });
+    } catch (err: any) {
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        errorMessages: [{ path: "", message: err.message }],
+      });
+    }
+  },
+
+  promoteUserToAdmin: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const user = await UserServices.promoteUserToAdmin(id);
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "User promoted to admin successfully",
+        data: user,
+      });
+    } catch (err: any) {
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        errorMessages: [{ path: "", message: err.message }],
+      });
+    }
+  },
+
+  deleteUser: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const result = await UserServices.deleteUserById(id);
+
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "User deleted successfully",
+      });
+    } catch (err: any) {
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        errorMessages: [{ path: "", message: err.message }],
+      });
+    }
+  },
 };

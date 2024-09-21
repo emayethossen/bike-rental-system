@@ -10,6 +10,10 @@ const getAllBikes = async (): Promise<TBike[]> => {
   return Bike.find();
 };
 
+const getBikeById = async (bikeId: string): Promise<TBike | null> => {
+  return Bike.findById(bikeId);
+};
+
 const updateBike = async (
   bikeId: string,
   updateData: Partial<TBike>,
@@ -24,6 +28,7 @@ const deleteBike = async (bikeId: string): Promise<TBike | null> => {
 export const BikeServices = {
   createBike,
   getAllBikes,
+  getBikeById,
   updateBike,
   deleteBike,
 };

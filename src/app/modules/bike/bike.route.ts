@@ -16,6 +16,9 @@ router.post(
 // Get all bikes
 router.get("/bikes", bikeController.getAllBikes);
 
+// Get a single bike by ID
+router.get("/bikes/:id", bikeController.getBikeById);
+
 // Update a bike
 router.put(
   "/bikes/:id",
@@ -30,6 +33,14 @@ router.delete(
   authMiddleware,
   adminMiddleware,
   bikeController.deleteBike,
+);
+
+// Update bike availability
+router.patch(
+  "/bikes/:id/availability",
+  authMiddleware, // Require authentication
+  // adminMiddleware, // Require admin access
+  bikeController.updateBikeAvailability, // Controller method for updating availability
 );
 
 export const BikeRoutes = router;
