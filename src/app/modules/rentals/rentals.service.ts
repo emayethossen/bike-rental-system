@@ -1,10 +1,12 @@
-
 import { Bike } from "../bike/bike.model";
 import { TRentals } from "./rentals.interface";
 import { Rental } from "./rentals.model";
 
 const createRental = async (
-  userId: string, bikeId: string, startTime: Date, paymentStatus: string
+  userId: string,
+  bikeId: string,
+  startTime: Date,
+  paymentStatus: string,
 ): Promise<TRentals> => {
   const bike = await Bike.findById(bikeId);
   if (!bike) {
@@ -57,8 +59,15 @@ const getRentalsByUser = async (userId: string): Promise<TRentals[]> => {
   return Rental.find({ userId }).populate("bikeId").exec();
 };
 
-const updatePaymentStatus = async (rentalId: string, status: 'Paid' | 'Unpaid'): Promise<TRentals | null> => {
-  return Rental.findByIdAndUpdate(rentalId, { paymentStatus: status }, { new: true });
+const updatePaymentStatus = async (
+  rentalId: string,
+  status: "Paid" | "Unpaid",
+): Promise<TRentals | null> => {
+  return Rental.findByIdAndUpdate(
+    rentalId,
+    { paymentStatus: status },
+    { new: true },
+  );
 };
 
 const findById = async (rentalId: string): Promise<TRentals | null> => {

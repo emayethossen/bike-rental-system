@@ -1,44 +1,49 @@
 import { Request, Response } from "express";
 import { rentalValidation } from "./rentals.validation";
 import { RentalService } from "./rentals.service";
-import { Bike } from "../bike/bike.model";
+import { Rental } from "./rentals.model";
 
 export const rentalController = {
   createRental: async (req: Request, res: Response) => {
     try {
-      console.log('Request Body:', req.body);  // Log request body
-  
+      // console.log('Request Body:', req.body);
+
       const userId = req.user?._id;
       if (!userId) {
-        return res.status(401).json({ success: false, message: "Unauthorized" });
+        return res
+          .status(401)
+          .json({ success: false, message: "Unauthorized" });
       }
-  
+
       // Log the received startTime from the frontend
-      console.log('Received startTime:', req.body.startTime);
-  
-      const { bikeId, startTime } = rentalValidation.rentalValidationSchema.parse({
-        ...req.body,
-        startTime: req.body.startTime || new Date().toISOString(),
-      });
-  
+      // console.log('Received startTime:', req.body.startTime);
+
+      const { bikeId, startTime } =
+        rentalValidation.rentalValidationSchema.parse({
+          ...req.body,
+          startTime: req.body.startTime || new Date().toISOString(),
+        });
+
       // Log the converted startTime
       const startTimeDate = new Date(startTime);
-      console.log('Converted startTime:', startTimeDate);
-  
+      // console.log('Converted startTime:', startTimeDate);
+
       if (isNaN(startTimeDate.getTime())) {
-        console.log('Invalid startTime:', startTime);
-        return res.status(400).json({ success: false, message: "Invalid start time value" });
+        // console.log('Invalid startTime:', startTime);
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid start time value" });
       }
-  
-      const paymentStatus = 'Unpaid';
-  
+
+      const paymentStatus = "Unpaid";
+
       const rental = await RentalService.createRental(
         userId,
         bikeId,
         startTimeDate,
-        paymentStatus
+        paymentStatus,
       );
-  
+
       res.status(201).json({
         success: true,
         statusCode: 201,
@@ -46,7 +51,7 @@ export const rentalController = {
         data: rental,
       });
     } catch (err: any) {
-      console.error('Error creating rental:', err);
+      // console.error('Error creating rental:', err);
       res.status(500).json({
         success: false,
         message: "Internal Server Error",
@@ -54,29 +59,32 @@ export const rentalController = {
       });
     }
   },
-  
 
   confirmPayment: async (req: Request, res: Response) => {
     try {
       const { transactionid, rentalId } = req.query;
 
       if (!transactionid || !rentalId) {
-        return res.status(400).json({ success: false, message: "Missing parameters" });
+        return res
+          .status(400)
+          .json({ success: false, message: "Missing parameters" });
       }
 
       const rental = await RentalService.findById(rentalId as string);
       if (!rental) {
-        return res.status(404).json({ success: false, message: "Rental not found" });
+        return res
+          .status(404)
+          .json({ success: false, message: "Rental not found" });
       }
 
-      await RentalService.updatePaymentStatus(rentalId as string, 'Paid');
+      await RentalService.updatePaymentStatus(rentalId as string, "Paid");
 
       res.status(200).json({
         success: true,
         message: "Payment confirmed successfully",
       });
     } catch (err: any) {
-      console.error('Error confirming payment:', err);
+      // console.error('Error confirming payment:', err);
       res.status(500).json({
         success: false,
         message: "Internal Server Error",
@@ -85,6 +93,7 @@ export const rentalController = {
     }
   },
 
+  // In your rental controller
   returnRental: async (req: Request, res: Response) => {
     try {
       const rentalId = req.params.id;
@@ -93,12 +102,11 @@ export const rentalController = {
 
       res.status(200).json({
         success: true,
-        statusCode: 200,
         message: "Bike returned successfully",
         data: rental,
       });
     } catch (err: any) {
-      console.error('Error returning rental:', err);
+      // console.error('Error returning rental:', err);
       res.status(500).json({
         success: false,
         message: "Internal Server Error",
@@ -111,7 +119,9 @@ export const rentalController = {
     try {
       const userId = req.user?._id;
       if (!userId) {
-        return res.status(401).json({ success: false, message: "Unauthorized" });
+        return res
+          .status(401)
+          .json({ success: false, message: "Unauthorized" });
       }
 
       const rentals = await RentalService.getRentalsByUser(userId);
@@ -123,11 +133,28 @@ export const rentalController = {
         data: rentals,
       });
     } catch (err: any) {
-      console.error('Error retrieving rentals:', err);
+      // console.error('Error retrieving rentals:', err);
       res.status(500).json({
         success: false,
         message: "Internal Server Error",
         errorMessages: [{ path: "", message: err.message }],
+      });
+    }
+  },
+
+  // In rental controller
+  getAllRentalsForAdmin: async (req: Request, res: Response) => {
+    try {
+      const rentals = await Rental.find().populate("bike");
+      res.status(200).json({
+        success: true,
+        data: rentals,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        // errorMessages: [{ path: '', message: err.message }],
       });
     }
   },

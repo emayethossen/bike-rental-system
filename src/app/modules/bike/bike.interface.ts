@@ -11,4 +11,4 @@ export type TBike = {
   bikeImage?: string;
   createdAt?: Date;
   updatedAt?: Date;
-}; 
+};

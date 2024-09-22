@@ -43,7 +43,8 @@ export const bikeController = {
     }
   },
 
-  getBikeById: async (req: Request, res: Response) => { // <-- New method for getting bike by ID
+  getBikeById: async (req: Request, res: Response) => {
+    // <-- New method for getting bike by ID
     try {
       const bikeId = req.params.id;
       const result = await BikeServices.getBikeById(bikeId);
@@ -126,32 +127,6 @@ export const bikeController = {
     }
   },
 
-  // Update bike availability
-  // updateBikeAvailability: async (req: Request, res: Response) => {
-  //   const { id } = req.params;
-  //   const { availability } = req.body;
-
-  //   try {
-  //     const updatedBike = await Bike.findByIdAndUpdate(
-  //       id,
-  //       { availability },
-  //       { new: true }
-  //     );
-
-  //     if (!updatedBike) {
-  //       return res.status(404).json({ error: "Bike not found" });
-  //     }
-
-  //     res.status(200).json({
-  //       message: "Bike availability updated successfully",
-  //       data: updatedBike,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error updating bike availability:", error);
-  //     res.status(500).json({ error: "An error occurred while updating bike availability" });
-  //   }
-  // },
-
   updateBikeAvailability: async (req: Request, res: Response) => {
     const { id } = req.params;
     const { isAvailable } = req.body; // Get isAvailable from the request body
@@ -159,18 +134,19 @@ export const bikeController = {
     try {
       const bike = await Bike.findById(id); // Find the bike by ID
       if (!bike) {
-        return res.status(404).json({ message: 'Bike not found' });
+        return res.status(404).json({ message: "Bike not found" });
       }
 
       // Update the isAvailable field
       bike.isAvailable = isAvailable;
       await bike.save(); // Save the changes to the database
 
-      res.status(200).json({ message: 'Bike availability updated successfully', bike });
+      res
+        .status(200)
+        .json({ message: "Bike availability updated successfully", bike });
     } catch (error) {
-      console.error('Error updating bike availability:', error);
-      res.status(500).json({ message: 'Internal server error' });
+      console.error("Error updating bike availability:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
-  }
-
+  },
 };

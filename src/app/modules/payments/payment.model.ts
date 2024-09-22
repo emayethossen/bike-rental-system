@@ -1,12 +1,12 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
 interface IPayment extends Document {
   tran_id: string;
   amount: number;
   status: string;
-  customer_name: string,
-  customer_email: string,
-  customer_phone: string,
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
   validationData?: object;
   createdAt: Date;
 }
@@ -17,9 +17,9 @@ const PaymentSchema: Schema = new Schema({
   customer_name: { type: String, required: true },
   customer_email: { type: String, required: true },
   customer_phone: { type: String, required: true },
-  status: { type: String, required: true, default: 'PENDING' },
+  status: { type: String, required: true, default: "PENDING" },
   validationData: { type: Schema.Types.Mixed, required: false },
   createdAt: { type: Date, default: Date.now },
 });
 
-export const Payment = mongoose.model<IPayment>('Payment', PaymentSchema);
+export const Payment = mongoose.model<IPayment>("Payment", PaymentSchema);

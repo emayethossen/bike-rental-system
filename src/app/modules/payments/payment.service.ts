@@ -1,26 +1,21 @@
-import SSLCommerz from 'sslcommerz-lts';
-import { Payment } from './payment.model';
+import SSLCommerz from "sslcommerz-lts";
+import { Payment } from "./payment.model";
 
-const store_id = 'abc66ea3e0839f86';
-const store_passwd = 'abc66ea3e0839f86@ssl';
-const is_live = false; // change to true in production
+const store_id = "abc66ea3e0839f86";
+const store_passwd = "abc66ea3e0839f86@ssl";
+const is_live = false;
 
 const sslcz = new SSLCommerz(store_id, store_passwd, is_live);
 
 export class PaymentService {
   static async initiatePayment(data: any) {
     const transactionId = `trans_${Date.now()}`;
-    const {
-      amount,
-      customer_name,
-      customer_email,
-      customer_phone,
-    } = data; // Assuming these fields come from frontend
+    const { amount, customer_name, customer_email, customer_phone } = data;
 
     const paymentData = {
       store_id,
       store_passwd,
-      total_amount: amount || "100", // Use passed amount or default
+      total_amount: amount || "100",
       currency: "BDT",
       tran_id: transactionId,
       success_url: "http://localhost:5000/api/payment/success",
@@ -39,7 +34,7 @@ export class PaymentService {
       product_name: "Bike Rental",
       product_category: "Service",
       product_profile: "general",
-      shipping_method: 'No',
+      shipping_method: "No",
       ship_name: customer_name,
       ship_add1: "Dhaka",
       ship_add2: "Dhaka",
@@ -51,7 +46,7 @@ export class PaymentService {
       value_a: "ref001_A",
       value_b: "ref002_B",
       value_c: "ref003_C",
-      value_d: "ref004_D"
+      value_d: "ref004_D",
     };
 
     try {
@@ -61,7 +56,7 @@ export class PaymentService {
       await Payment.create({
         tran_id: transactionId,
         amount: amount || "100", // Store amount as well
-        status: 'PENDING',
+        status: "PENDING",
         customer_name,
         customer_email,
         customer_phone,
@@ -69,7 +64,7 @@ export class PaymentService {
 
       return paymentURL;
     } catch (error) {
-      throw new Error('SSLCommerz payment initiation failed');
+      throw new Error("SSLCommerz payment initiation failed");
     }
   }
 
@@ -79,16 +74,16 @@ export class PaymentService {
     try {
       const validationResponse = await sslcz.validate(val_id);
 
-      if (validationResponse.status === 'VALID') {
+      if (validationResponse.status === "VALID") {
         await Payment.updateOne(
           { tran_id: validationResponse.tran_id },
-          { status: 'COMPLETED', validationData: validationResponse }
+          { status: "COMPLETED", validationData: validationResponse },
         );
       }
 
       return validationResponse;
     } catch (error) {
-      throw new Error('SSLCommerz payment validation failed');
+      throw new Error("SSLCommerz payment validation failed");
     }
   }
 }

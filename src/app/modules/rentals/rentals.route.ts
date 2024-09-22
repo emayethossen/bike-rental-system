@@ -16,4 +16,12 @@ router.put(
 
 router.get("/rentals", authMiddleware, rentalController.getRentalsByUser);
 
+// In rental routes
+router.get(
+  "/admin/rentals",
+  authMiddleware,
+  adminMiddleware,
+  rentalController.getAllRentalsForAdmin,
+);
+
 export const RentalRoutes = router;

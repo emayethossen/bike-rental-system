@@ -72,5 +72,5 @@ export const UserServices = {
   updateUser,
   getAllUsers,
   promoteUserToAdmin,
-  deleteUserById
+  deleteUserById,
 };

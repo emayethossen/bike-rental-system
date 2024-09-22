@@ -5,13 +5,12 @@ const rentalValidationSchema = z.object({
   startTime: z.string().refine(
     (val) => {
       const parsedDate = new Date(val);
-      console.log('Parsed Start Time:', parsedDate); // Log parsed date
-      return !isNaN(parsedDate.getTime()); // Validate that it's a valid date
+      // console.log('Parsed Start Time:', parsedDate);
+      return !isNaN(parsedDate.getTime());
     },
-    { message: "Invalid start time value" }
+    { message: "Invalid start time value" },
   ),
 });
-
 
 export const rentalValidation = {
   rentalValidationSchema,
